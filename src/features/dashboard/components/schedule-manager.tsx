@@ -13,7 +13,7 @@ import AppDialog from "@/components/app-dialog";
 import { CreateScheduleHandleRef } from "../interfaces/createschedule-handle-ref";
 import { Controller, useForm } from "react-hook-form";
 import useManageSchedule from "./hooks/use-manage-schedule";
-import { useToast } from "../../../hooks/use-toast";
+import { toast } from "sonner";
 import useSchedule from "./hooks/use-schedule";
 import { ScheduleFormInputs } from "../interfaces/forms/schedule-form-inputs";
 import useTimeFormatting from "@/common/hooks/use-time-formatting";
@@ -29,8 +29,6 @@ const ScheduleManager = forwardRef(
     >(undefined);
 
     const [isUpdate, setIsUpdate] = useState(false);
-
-    const { toast } = useToast();
 
     const { control, register, handleSubmit, reset } =
       useForm<ScheduleFormInputs>();
@@ -110,51 +108,30 @@ const ScheduleManager = forwardRef(
 
     useEffect(() => {
       if (isSuccess) {
-        toast({
-          title: "Schedule Created",
-          description: "Schedule has been created successfully",
-        });
+        toast("Schedule has been created successfully");
         setIsDialogOpen(false);
       } else if (error) {
-        toast({
-          variant: "destructive",
-          title: "Schedule Creation Failed",
-          description: "Schedule creation failed",
-        });
+        toast("Schedule creation failed");
       }
-    }, [isSuccess, error, toast]);
+    }, [isSuccess, error]);
 
     useEffect(() => {
       if (isScheduleUpdateSuccess) {
-        toast({
-          title: "Schedule Updated",
-          description: "Schedule has been updated successfully",
-        });
+        toast("Schedule has been updated successfully");
         setIsDialogOpen(false);
       } else if (scheduleUpdateError) {
-        toast({
-          variant: "destructive",
-          title: "Schedule Update Failed",
-          description: "Schedule update failed",
-        });
+        toast.error("Schedule update failed");
       }
-    }, [isScheduleUpdateSuccess, scheduleUpdateError, toast]);
+    }, [isScheduleUpdateSuccess, scheduleUpdateError]);
 
     useEffect(() => {
       if (isScheduleDeleteSuccess) {
-        toast({
-          title: "Schedule Deleted",
-          description: "Schedule has been deleted successfully",
-        });
+        toast("Schedule has been deleted successfully");
         setIsDialogOpen(false);
       } else if (scheduleDeleteError) {
-        toast({
-          variant: "destructive",
-          title: "Schedule Delete Failed",
-          description: "Schedule delete failed",
-        });
+        toast.error("Schedule delete failed");
       }
-    }, [isScheduleDeleteSuccess, scheduleDeleteError, toast]);
+    }, [isScheduleDeleteSuccess, scheduleDeleteError]);
 
     return (
       <AppDialog

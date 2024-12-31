@@ -6,7 +6,7 @@ import { UserResponse } from "../../../interfaces/response/userResponse";
 import { RoleResponse } from "../../../interfaces/response/roleResponse";
 import { useAppDispatch } from "../../../../../redux/hooks/useAppDispatch";
 import { login } from "../../../../../redux/slices/auth-slice";
-import { useToast } from "../../../../../hooks/use-toast";
+import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 interface LoginResponse {
@@ -16,7 +16,6 @@ interface LoginResponse {
 
 export const useLoginUser = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const dispatch = useAppDispatch();
 
   return useMutation({
@@ -67,15 +66,9 @@ export const useLoginUser = () => {
     },
     onError: (error: AxiosError) => {
       if (error.status === 400) {
-        toast({
-          variant: "destructive",
-          title: "Email or password is incorrect",
-        });
+        toast.error("Email or password is incorrect");
       } else {
-        toast({
-          variant: "destructive",
-          title: "An error occurred",
-        });
+        toast.error("An error occurred");
       }
     },
   });

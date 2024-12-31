@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../../../../../lib/apiClient";
 import { RegisterFormData } from "../../../interfaces/registerFormData";
 
@@ -13,6 +13,8 @@ interface RegisterResponse {
 }
 
 export const useRegisterUser = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data: RegisterFormData) => {
       const response = await apiClient.post<RegisterResponse>(
@@ -20,6 +22,9 @@ export const useRegisterUser = () => {
         data
       );
       return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };

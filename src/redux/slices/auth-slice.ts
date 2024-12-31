@@ -2,18 +2,35 @@ import { createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit/react";
 import { AuthState } from "@/common/interfaces/redux/state/auth-state";
 import { AuthPayload } from "@/common/interfaces/redux/payloads/auth-payload";
+import { jwtDecode } from "jwt-decode";
 
-const initialState: AuthState = localStorage.getItem("auth")
-  ? JSON.parse(localStorage.getItem("auth") as string)
-  : {
-      isLoggedIn: false,
-      firstName: "",
-      lastName: "",
-      email: "",
-      userId: "",
-      token: "",
-      roles: [],
-    };
+const isTokenValid = (token: string): boolean => {
+  try {
+    const decodedToken: { exp: number } = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    return decodedToken.exp > currentTime;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Token validation error:", error.message);
+    }
+    return false;
+  }
+};
+
+const storedAuth = localStorage.getItem("auth");
+const parsedAuth = storedAuth ? JSON.parse(storedAuth) : null;
+const initialState: AuthState =
+  parsedAuth && isTokenValid(parsedAuth.token)
+    ? parsedAuth
+    : {
+        isLoggedIn: false,
+        firstName: "",
+        lastName: "",
+        email: "",
+        userId: "",
+        token: "",
+        roles: [],
+      };
 
 export const authSlice = createSlice({
   name: "auth",
