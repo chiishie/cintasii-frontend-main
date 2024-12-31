@@ -16,8 +16,12 @@ import {
 
 export default function DashboardLayout({
   children,
+  title,
+  subTitle,
 }: {
   children: React.ReactNode;
+  title: string;
+  subTitle: string;
 }) {
   return (
     <SidebarProvider>
@@ -30,13 +34,11 @@ export default function DashboardLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="#">{title}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage> {subTitle} </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

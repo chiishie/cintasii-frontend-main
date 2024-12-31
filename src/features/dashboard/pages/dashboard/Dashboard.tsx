@@ -10,7 +10,7 @@ const Dashboard = () => {
   const createScheduleRef = useRef<CreateScheduleHandleRef>(null);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Schedules" subTitle="Calendar">
       <CreateSchedule ref={createScheduleRef} />
       <Calendar
         events={
